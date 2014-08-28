@@ -1,1 +1,11 @@
-<p>Ciaooo</p>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Dashboard</h1>
+    </div>
+</div>
+
+<ul>
+    <?php foreach ($databases as $database) { ?>
+    <li><?= $database->Database ?></li>
+    <?php } ?>
+</ul>
