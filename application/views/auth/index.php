@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Yolo SQL | MySQL lightweight client</title>
 
     <link href="<?= site_url('css/bootstrap.min.css'); ?>" rel="stylesheet">
     <link href="<?= site_url('css/metisMenu.min.css'); ?>" rel="stylesheet">

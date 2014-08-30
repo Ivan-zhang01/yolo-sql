@@ -15,7 +15,10 @@
     <link href="<?= site_url('css/metisMenu.min.css'); ?>" rel="stylesheet">
     <link href="<?= site_url('css/sb-admin-2.css'); ?>" rel="stylesheet">
     <link href="<?= site_url('css/font-awesome.css'); ?>" rel="stylesheet" type="text/css">
-
+    <link href="<?= site_url('css/codemirror.css'); ?>" rel="stylesheet">
+    <link href="<?= site_url('css/show-hint.css'); ?>" rel="stylesheet">
+    <link href="<?= site_url('css/base.css'); ?>" rel="stylesheet">
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -45,7 +48,66 @@
     <script src="<?= site_url('js/bootstrap.min.js') ?>"></script>
     <script src="<?= site_url('js/metisMenu.min.js') ?>"></script>
     <script src="<?= site_url('js/sb-admin-2.js') ?>"></script>
+    <script src="<?= site_url('js/codemirror.js') ?>"></script>
+    <script src="<?= site_url('js/sql.js') ?>"></script>
+    <script src="<?= site_url('js/show-hint.js') ?>"></script>
+    <script src="<?= site_url('js/sql-hint.js') ?>"></script>
+    <script>
+        window.onload = function() {
+            var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+                mode: 'text/x-mysql',
+                indentWithTabs: true,
+                smartIndent: true,
+                lineNumbers: true,
+                matchBrackets : true,
+                autofocus: true,
+                extraKeys: {"Ctrl-Space": "autocomplete"},
+            });
 
+            var select_st_btn = document.getElementById('select-statement'),
+                    insert_st_btn = document.getElementById('insert-statement'),
+                    update_st_btn = document.getElementById('update-statement'),
+                    delete_st_btn = document.getElementById('delete-statement');
+
+            select_st_btn.addEventListener('click', function () {
+                editor.setValue("SELECT * FROM tbl_name;");
+            }, false);
+
+            insert_st_btn.addEventListener('click', function () {
+                editor.setValue("INSERT INTO tbl_name (some_column) VALUES (some_value);");
+            }, false);
+
+            update_st_btn.addEventListener('click', function () {
+                editor.setValue("UPDATE tbl_name SET column1=value1 WHERE some_column=some_value;");
+            }, false);
+
+            delete_st_btn.addEventListener('click', function () {
+                editor.setValue("DELETE FROM tbl_name WHERE some_column=some_value;");
+            }, false);
+        };
+
+        $(document).ready(function() {
+            $('.nav li a#<?= $_SESSION['used'] ?>').addClass('active');
+            
+            $('.use_schema').click(function() {
+                // Remove previous active db
+                $('.nav li a#<?= $_SESSION['used'] ?>').removeClass('active');
+                
+                var db_name = $(this).data('schema');
+                
+                $.ajax({
+                    'url' : '<?= site_url() ?>index.php/home/use_database',
+                    'type' : 'POST',
+                    'data' : {'db_name' : db_name},
+                    'success' : function (data) {
+                        $('.nav li a#<?= $_SESSION['used'] ?>').addClass('active');
+                    }
+                });
+            });
+
+        });
+    </script>
+    
 </body>
 
 </html>
