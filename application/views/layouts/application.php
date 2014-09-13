@@ -87,11 +87,12 @@
         };
 
         $(document).ready(function() {
-            $('.nav li a#<?= $_SESSION['used'] ?>').addClass('active');
+            // First access
+            $('#<?= $_SESSION['used'] ?>').addClass('active');
             
             $('.use_schema').click(function() {
                 // Remove previous active db
-                $('.nav li a#<?= $_SESSION['used'] ?>').removeClass('active');
+                $('#<?= $_SESSION['used'] ?>').removeClass('active');
                 
                 var db_name = $(this).data('schema');
                 
@@ -100,7 +101,7 @@
                     'type' : 'POST',
                     'data' : {'db_name' : db_name},
                     'success' : function (data) {
-                        $('.nav li a#<?= $_SESSION['used'] ?>').addClass('active');
+                        $('#' + data).addClass('active');
                     }
                 });
             });

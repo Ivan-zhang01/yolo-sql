@@ -54,8 +54,8 @@ class Home extends MY_Controller {
         $this->db->query('USE ' . $_POST['db_name']);
         $_SESSION['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
         
-        /*header('Content-Type: application/json');
-        echo json_encode($_SESSION['used']);*/
+        header('Content-Type: application/json');
+        echo json_encode($_SESSION['used']);
     }
     
 }
