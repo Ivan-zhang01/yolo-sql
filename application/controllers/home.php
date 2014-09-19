@@ -49,6 +49,7 @@ class Home extends MY_Controller {
         $this->data['views'] = $views;
         $this->data['procedures'] = $procedures;
         $this->data['functions'] = $functions;
+        $this->data['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
         //$_SESSION['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
     }
     
@@ -60,21 +61,43 @@ class Home extends MY_Controller {
         $this->db->query('USE ' . $_POST['db_name']);
         $_SESSION['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
         
-        header('Content-Type: application/json');
-        echo json_encode($_SESSION['used']);
+        // Send the output
+        $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($_SESSION['used']));
     }
     
     public function execute_statements() {
+        header('Content-Type: application/json');
         session_start();
         $this->view = false;
-        header('Content-Type: application/json');
         
         // Execute statements
+        $this->db->query('USE ' . $_SESSION['used']);
         $result = $this->db->query($_POST['content']);
         
-        $errNo   = $this->db->_error_number();
-        $errMess = $this->db->_error_message();
-        echo json_encode("$errNo: $errMess");
+        if (empty($result) && $result === false)
+        {
+            // Errors
+            $err_no   = $this->db->_error_number();
+            $err_mess = $this->db->_error_message();
+            
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode("$err_no: $err_mess"));
+        }
+        else if ($result === true)
+        {
+            // Write type queries
+            
+        }
+        else if (!empty($result))
+        {
+            // Read type queries
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($result));
+        }
         
         /*if ($result === false) {
             $errNo   = $this->db->_error_number();

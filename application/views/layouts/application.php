@@ -90,7 +90,7 @@
 
         $(document).ready(function() {
             // First access
-            $('#<?= $_SESSION['used'] ?>').addClass('active');
+            $('#<?= isset($_SESSION['used']) ? $_SESSION['used'] : $used ?>').addClass('active');
             
             $('.use_schema').click(function() {
                 // Remove previous active db
