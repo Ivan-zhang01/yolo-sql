@@ -6,9 +6,8 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="btn-group">
-            <button class="btn btn-sm btn-default">Execute on cursor</button>
-            <button class="btn btn-sm btn-default">Execute selected</button>
-            <button class="btn btn-sm btn-default">Execute all</button>
+            <button id="execute-on-cursor" class="btn btn-sm btn-default">Execute on cursor</button>
+            <button id="execute-selected" class="btn btn-sm btn-default">Execute selected</button>
             <button id="select-statement" class="btn btn-sm btn-default">Select statement</button>
             <button id="insert-statement" class="btn btn-sm btn-default">Insert statement</button>
             <button id="update-statement" class="btn btn-sm btn-default">Update statement</button>
@@ -24,6 +23,7 @@
     <div class="col-lg-12">
         <div id="output">
             <h2 class="page-header">Output</h2>
+            <p id="output-text"></p>
         </div>
     </div>
 </div>

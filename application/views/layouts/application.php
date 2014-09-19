@@ -53,8 +53,10 @@
     <script src="<?= site_url('js/show-hint.js') ?>"></script>
     <script src="<?= site_url('js/sql-hint.js') ?>"></script>
     <script>
+        var editor = null;
+        
         window.onload = function() {
-            var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+            editor = CodeMirror.fromTextArea(document.getElementById('code'), {
                 mode: 'text/x-mysql',
                 indentWithTabs: true,
                 smartIndent: true,
@@ -92,20 +94,34 @@
             
             $('.use_schema').click(function() {
                 // Remove previous active db
-                $('#<?= $_SESSION['used'] ?>').removeClass('active');
+                $('a.database').removeClass('active');
                 
                 var db_name = $(this).data('schema');
                 
-                $.ajax({
-                    'url' : '<?= site_url() ?>index.php/home/use_database',
-                    'type' : 'POST',
-                    'data' : {'db_name' : db_name},
-                    'success' : function (data) {
-                        $('#' + data).addClass('active');
-                    }
+                $.post('<?= site_url() ?>index.php/home/use_database', {'db_name' : db_name}, function(data) {
+                    $('#' + data).addClass('active');
                 });
             });
-
+            
+            // Execute on cursor
+            $('#execute-on-cursor').click(function() {
+                var cursor = editor.getCursor(),
+                    content = editor.getLine(cursor.line);
+                    
+                $.post('<?= site_url() ?>index.php/home/execute_statements', {'content': content}, function(data) {
+                    console.log(data);
+                });
+            });
+            
+            // Execute selected
+            $('#execute-selected').click(function() {
+                var content = editor.getSelection();
+                
+                $.post('<?= site_url() ?>index.php/home/execute_statements', {'content': content}, function(data) {
+                    console.log(data);
+                    $('#output-text').text(data);
+                });
+            });
         });
     </script>
     

@@ -5,16 +5,16 @@
                 <div class="input-group custom-search-form">
                     <input type="text" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
+                        <a href="<?= site_url() . 'index.php/home' ?>" class="btn btn-default" type="button">
                             <i class="fa fa-search"></i>
-                        </button>
+                        </a>
                     </span>
                 </div>
                 <!-- /input-group -->
             </li>
             <?php foreach ($databases as $database) { ?>
                 <li>
-                    <a id="<?= $database->Database ?>" href="#"><i class="fa fa-database fa-fw"></i> <?= $database->Database ?><span class="fa arrow"></span></a>
+                    <a id="<?= $database->Database ?>" class="database" href="#"><i class="fa fa-database fa-fw"></i> <?= $database->Database ?><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
                             <a class="use_schema" data-schema="<?= $database->Database ?>" href="javascript:;">Use schema</a>

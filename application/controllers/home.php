@@ -3,6 +3,8 @@
 class Home extends MY_Controller {
     
     public function index() {
+        session_start();
+        
         // Get database names
         $databases = $this->db->query('SHOW DATABASES')->result();
         
@@ -24,19 +26,22 @@ class Home extends MY_Controller {
             
             $views[$db_name] = $this->db->select('views.*')
                     ->where('table_schema', $db_name)
-                    ->get('views');
+                    ->get('views')
+                    ->result();
             
             // Get stored procedures
             $procedures[$db_name] = $this->db->select('routines.*')
                     ->where('routine_type', 'PROCEDURE')
                     ->where('routine_schema', $db_name)
-                    ->get('routines');
+                    ->get('routines')
+                    ->result();
             
             // Get stored functions
             $functions[$db_name] = $this->db->select('routines.*')
                     ->where('routine_type', 'FUNCTION')
                     ->where('routine_schema', $db_name)
-                    ->get('routines');
+                    ->get('routines')
+                    ->result();
         }
         
         $this->data['databases'] = $databases;
@@ -44,11 +49,12 @@ class Home extends MY_Controller {
         $this->data['views'] = $views;
         $this->data['procedures'] = $procedures;
         $this->data['functions'] = $functions;
-        $_SESSION['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
+        //$_SESSION['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
     }
     
     public function use_database() {
-        //$this->view = false;
+        session_start();
+        $this->view = false;
         
         // Change database
         $this->db->query('USE ' . $_POST['db_name']);
@@ -58,4 +64,24 @@ class Home extends MY_Controller {
         echo json_encode($_SESSION['used']);
     }
     
+    public function execute_statements() {
+        session_start();
+        $this->view = false;
+        header('Content-Type: application/json');
+        
+        // Execute statements
+        $result = $this->db->query($_POST['content']);
+        
+        $errNo   = $this->db->_error_number();
+        $errMess = $this->db->_error_message();
+        echo json_encode("$errNo: $errMess");
+        
+        /*if ($result === false) {
+            $errNo   = $this->db->_error_number();
+            $errMess = $this->db->_error_message();
+            echo json_encode("$errNo: $errMess");
+        } else if ($result === true) {
+            echo json_encode($result->result());
+        }*/
+    }
 }
