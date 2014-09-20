@@ -50,7 +50,6 @@ class Home extends MY_Controller {
         $this->data['procedures'] = $procedures;
         $this->data['functions'] = $functions;
         $this->data['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
-        //$_SESSION['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
     }
     
     public function use_database() {
@@ -68,9 +67,10 @@ class Home extends MY_Controller {
     }
     
     public function execute_statements() {
-        header('Content-Type: application/json');
         session_start();
+        $this->output->set_content_type('application/json');
         $this->view = false;
+        $ret = array();
         
         // Execute statements
         $this->db->query('USE ' . $_SESSION['used']);
@@ -82,6 +82,8 @@ class Home extends MY_Controller {
             $err_no   = $this->db->_error_number();
             $err_mess = $this->db->_error_message();
             
+            $ret['status'] = false;
+            $ret['content'] = "$err_no: $err_mess";
             $this->output
                 ->set_content_type('application/json')
                 ->set_output(json_encode("$err_no: $err_mess"));
@@ -89,22 +91,22 @@ class Home extends MY_Controller {
         else if ($result === true)
         {
             // Write type queries
-            
+            $ret['status'] = true;
+            $ret['type'] = 'w';
+            $ret['content'] = $this->db->affected_rows();
         }
-        else if (!empty($result))
+        else
         {
             // Read type queries
+            $ret['status'] = true;
+            $ret['type'] = 'r';
+            $ret['content'] = $result->result();
+            
             $this->output
                 ->set_content_type('application/json')
-                ->set_output(json_encode($result));
+                ->set_output(json_encode($ret));
         }
         
-        /*if ($result === false) {
-            $errNo   = $this->db->_error_number();
-            $errMess = $this->db->_error_message();
-            echo json_encode("$errNo: $errMess");
-        } else if ($result === true) {
-            echo json_encode($result->result());
-        }*/
+        $this->output->set_output(json_encode($ret));
     }
 }

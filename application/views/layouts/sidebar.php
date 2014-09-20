@@ -2,15 +2,9 @@
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
             <li class="sidebar-search">
-                <div class="input-group custom-search-form">
-                    <input type="text" class="form-control" placeholder="Search...">
-                    <span class="input-group-btn">
-                        <a href="<?= site_url() . 'index.php/home' ?>" class="btn btn-default" type="button">
-                            <i class="fa fa-search"></i>
-                        </a>
-                    </span>
-                </div>
-                <!-- /input-group -->
+                <a href="<?= site_url() . 'index.php/home' ?>" class="btn btn-default" type="button">
+                    <i class="fa fa-refresh"></i>
+                </a>
             </li>
             <?php foreach ($databases as $database) { ?>
                 <li>

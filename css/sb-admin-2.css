@@ -82,6 +82,7 @@ body {
 }
 
 .sidebar .sidebar-nav.navbar-collapse {
+    overflow-x: scroll;
     padding-right: 0;
     padding-left: 0;
 }

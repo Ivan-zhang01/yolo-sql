@@ -23,7 +23,7 @@
     <div class="col-lg-12">
         <div id="output">
             <h2 class="page-header">Output</h2>
-            <p id="output-text"></p>
+            <div id="output-section"></div>
         </div>
     </div>
 </div>

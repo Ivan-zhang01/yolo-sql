@@ -43,7 +43,26 @@
 
     </div>
     <!-- /#wrapper -->
-
+    
+    <!-- MODALS -->
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
     <script src="<?= site_url('js/jquery-1.11.0.js') ?>"></script>
     <script src="<?= site_url('js/bootstrap.min.js') ?>"></script>
     <script src="<?= site_url('js/metisMenu.min.js') ?>"></script>
@@ -52,76 +71,21 @@
     <script src="<?= site_url('js/sql.js') ?>"></script>
     <script src="<?= site_url('js/show-hint.js') ?>"></script>
     <script src="<?= site_url('js/sql-hint.js') ?>"></script>
+    <script src="<?= site_url('js/yolo-sql.js') ?>"></script>
     <script>
-        var editor = null;
-        
-        window.onload = function() {
-            editor = CodeMirror.fromTextArea(document.getElementById('code'), {
-                mode: 'text/x-mysql',
-                indentWithTabs: true,
-                smartIndent: true,
-                lineNumbers: true,
-                matchBrackets : true,
-                autofocus: true,
-                extraKeys: {"Ctrl-Space": "autocomplete"},
-            });
-
-            var select_st_btn = document.getElementById('select-statement'),
-                    insert_st_btn = document.getElementById('insert-statement'),
-                    update_st_btn = document.getElementById('update-statement'),
-                    delete_st_btn = document.getElementById('delete-statement');
-
-            select_st_btn.addEventListener('click', function () {
-                editor.setValue("SELECT * FROM tbl_name;");
-            }, false);
-
-            insert_st_btn.addEventListener('click', function () {
-                editor.setValue("INSERT INTO tbl_name (some_column) VALUES (some_value);");
-            }, false);
-
-            update_st_btn.addEventListener('click', function () {
-                editor.setValue("UPDATE tbl_name SET column1=value1 WHERE some_column=some_value;");
-            }, false);
-
-            delete_st_btn.addEventListener('click', function () {
-                editor.setValue("DELETE FROM tbl_name WHERE some_column=some_value;");
-            }, false);
-        };
-
         $(document).ready(function() {
             // First access
+            yolo_sql.set_site_url("<?= site_url(); ?>");
             $('#<?= isset($_SESSION['used']) ? $_SESSION['used'] : $used ?>').addClass('active');
             
-            $('.use_schema').click(function() {
-                // Remove previous active db
-                $('a.database').removeClass('active');
-                
-                var db_name = $(this).data('schema');
-                
-                $.post('<?= site_url() ?>index.php/home/use_database', {'db_name' : db_name}, function(data) {
-                    $('#' + data).addClass('active');
-                });
-            });
+            // Use schema
+            $('.use_schema').click(yolo_sql.use_schema);
             
             // Execute on cursor
-            $('#execute-on-cursor').click(function() {
-                var cursor = editor.getCursor(),
-                    content = editor.getLine(cursor.line);
-                    
-                $.post('<?= site_url() ?>index.php/home/execute_statements', {'content': content}, function(data) {
-                    console.log(data);
-                });
-            });
+            $('#execute-on-cursor').click(yolo_sql.execute_on_cursor);
             
             // Execute selected
-            $('#execute-selected').click(function() {
-                var content = editor.getSelection();
-                
-                $.post('<?= site_url() ?>index.php/home/execute_statements', {'content': content}, function(data) {
-                    console.log(data);
-                    $('#output-text').text(data);
-                });
-            });
+            $('#execute-selected').click(yolo_sql.execute_selected);
         });
     </script>
     
