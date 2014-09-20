@@ -18,7 +18,7 @@
                             <?php if (!empty($tables[$database->Database])) { ?>
                                 <ul class="nav nav-third-level">
                                     <?php foreach ($tables[$database->Database] as $table) { ?>
-                                        <li><a href="#"><?= $table->{"Tables_in_" . $database->Database} ?></a></li>
+                                        <li><a class="tables" href="#"><?= $table->{"Tables_in_" . $database->Database} ?></a></li>
                                     <?php } ?>
                                 </ul>
                             <?php } ?>

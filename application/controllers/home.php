@@ -2,6 +2,24 @@
 
 class Home extends MY_Controller {
     
+    private function write_query_response($query_result) {
+        $ret = array();
+        
+        if ($query_result === false) {
+            // Errors
+            $err_no   = $this->db->_error_number();
+            $err_mess = $this->db->_error_message();
+            
+            $ret['status'] = false;
+            $ret['content'] = "$err_no: $err_mess";
+        } else {
+            $ret['status'] = true;
+            $ret['content'] = 'Schema created successfully.';
+        }
+        
+        return $ret;
+    }
+    
     public function index() {
         session_start();
         
@@ -49,7 +67,11 @@ class Home extends MY_Controller {
         $this->data['views'] = $views;
         $this->data['procedures'] = $procedures;
         $this->data['functions'] = $functions;
-        $this->data['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
+        if (isset($_SESSION['used'])) {
+            $this->data['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
+        } else {
+            $_SESSION['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
+        }
     }
     
     public function use_database() {
@@ -108,19 +130,7 @@ class Home extends MY_Controller {
         
         // Create database
         $result = $this->db->query('CREATE SCHEMA ' . $_POST['schema']);
-        $ret = array();
-        
-        if (empty($result) && $result === false) {
-            // Errors
-            $err_no   = $this->db->_error_number();
-            $err_mess = $this->db->_error_message();
-            
-            $ret['status'] = false;
-            $ret['content'] = "$err_no: $err_mess";
-        } else if ($result === true) {
-            $ret['status'] = true;
-            $ret['content'] = 'Schema created successfully.';
-        }
+        $ret = $this->write_query_response($result);
         
         // Send the output
         $this->output
@@ -134,19 +144,34 @@ class Home extends MY_Controller {
         
         // Create database
         $result = $this->db->query('DROP SCHEMA ' . $_POST['schema']);
-        $ret = array();
+        $ret = $this->write_query_response($result);
         
-        if (empty($result) && $result === false) {
-            // Errors
-            $err_no   = $this->db->_error_number();
-            $err_mess = $this->db->_error_message();
-            
-            $ret['status'] = false;
-            $ret['content'] = "$err_no: $err_mess";
-        } else if ($result === true) {
-            $ret['status'] = true;
-            $ret['content'] = 'Drop successful.';
-        }
+        // Send the output
+        $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($ret));
+    }
+    
+    public function create_table() {
+        session_start();
+        $this->view = false;
+        
+        // Create table
+        $result = $this->db->query($_POST['sql']);
+        $ret = $this->write_query_response($result);
+        
+        $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($ret));
+    }
+    
+    public function drop_table() {
+        session_start();
+        $this->view = false;
+        
+        // Create database
+        $result = $this->db->query('DROP TABLE ' . $_POST['table']);
+        $ret = $this->write_query_response($result);
         
         // Send the output
         $this->output

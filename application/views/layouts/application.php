@@ -46,14 +46,14 @@
     
     <!-- MODALS -->
     <div class="modal fade" id="createSchemaModal" tabindex="-1" role="dialog" aria-labelledby="createSchemaModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="createSchemaModalLabel">Create schema</h4>
                 </div>
                 <div class="modal-body">
-                    <form id="create-schema-form" class="form-inline" role="form" method="post" action="<?= site_url() . 'index.php/home/create_schema' ?>">
+                    <form id="create-schema-form" class="" role="form" method="post" action="<?= site_url() . 'index.php/home/create_schema' ?>">
                         <div class="form-group">
                           <label class="sr-only">Schema name</label>
                           <input type="text" name="schema" class="form-control" placeholder="Enter schema name">
@@ -73,7 +73,10 @@
     </ul>
     
     <!-- Table -->
-    
+    <ul id="table-context-menu" class="dropdown-menu" role="menu" style="display:none" >
+        <li><a tabindex="-1" href="#">Drop table</a></li>
+        <li><a tabindex="-1" href="#">Alter table</a></li>
+    </ul>
     
     <script src="<?= site_url('js/jquery-1.11.0.js') ?>"></script>
     <script src="<?= site_url('js/bootstrap.min.js') ?>"></script>
@@ -91,6 +94,38 @@
             yolo_sql.set_site_url("<?= site_url(); ?>");
             $('#<?= isset($_SESSION['used']) ? $_SESSION['used'] : $used ?>').addClass('active');
             
+            // Context menus
+            $('.database').contextMenu({
+                menuSelector: "#db-context-menu",
+                menuSelected: function (invokedOn, selectedMenu) {
+                    switch (selectedMenu.text()) {
+                        case 'Drop schema':
+                            yolo_sql.drop_schema(invokedOn.text());
+                        break;
+                        
+                        case 'Create table':
+                            $('#create-table-schema-name').val(invokedOn.text());
+                            $('#tabs a[href="#create-table"]').tab('show');
+                        break;
+                    }
+                }
+            });
+            
+            $('.tables').contextMenu({
+                menuSelector: "#table-context-menu",
+                menuSelected: function (invokedOn, selectedMenu) {
+                    switch (selectedMenu.text()) {
+                        case 'Drop table':
+                            yolo_sql.drop_table(invokedOn.text());
+                        break;
+                        
+                        case 'Alter table':
+                            
+                        break;
+                    }
+                }
+            });
+            
             // Use schema
             $('.use_schema').click(yolo_sql.use_schema);
             
@@ -103,16 +138,18 @@
             // Create schema
             $('#create-schema-form').submit(yolo_sql.create_schema);
             
-            $('.database').contextMenu({
-                menuSelector: "#db-context-menu",
-                menuSelected: function (invokedOn, selectedMenu) {
-                    switch (selectedMenu.text()) {
-                        case 'Drop schema':
-                            yolo_sql.drop_schema(invokedOn.text());
-                        break;
-                    }
-                }
+            // Add field (create table)
+            $('#create-table-add-field').click(yolo_sql.add_field);
+            
+            // Delete field (create table)
+            $('.create-table-delete-field').click(function() {
+                var $el = $(this);
+                
+                $el.parent('tr').remove();
             });
+            
+            // Apply changes (create table)
+            $('#create-table-apply').click(yolo_sql.create_table);
         });
     </script>
     

@@ -160,4 +160,85 @@
             }
         });
     };
+    
+    yolo_sql.add_field = function() {
+        var str = 
+                '<tr>' +
+                    '<td><input data-field="name" type="text" class="form-control"></td>' +
+                    '<td><input data-field="type" type="text" class="form-control"></td>' +
+                    '<td><input data-field="pk" type="checkbox"></td>' +
+                    '<td><input data-field="nn" type="checkbox"></td>' +
+                    '<td><input data-field="ai" type="checkbox"></td>' +
+                    '<td><input data-field="default" type="text" class="form-control"></td>' +
+                    '<td><button class="create-table-delete-field" class="btn btn-xs btn-danger">D</button></td>' +
+                '</tr>';
+        
+        $('#create-table-cols').append(str);
+    };
+    
+    yolo_sql.create_table = function() {
+        var db_name = $('#create-table-schema-name').val(),
+            table_name = $('#create-table-table-name').val(),
+            engine = $('#create-table-engine').val(),
+            $rows = $('#create-table-cols').children(),
+            sql = 'CREATE TABLE ' + db_name + '.' + table_name + ' (';
+    
+        $rows.each(function() {
+            var def = $(this).find('[data-field="default"]').val(),
+                pk = $(this).find('[data-field="pk"]').is(':checked'),
+                nn = $(this).find('[data-field="nn"]').is(':checked'),
+                ai = $(this).find('[data-field="ai"]').is(':checked');
+                
+            // Insert fields
+            sql += $(this).find('[data-field="name"]').val() + ' ';
+            sql += $(this).find('[data-field="type"]').val() + ' ';
+            
+            if (pk) {
+                sql += 'PRIMARY KEY ';
+            }
+            
+            if (pk && ai) {
+                sql += 'AUTO_INCREMENT ';
+            }
+            
+            sql += (!pk && !ai && !nn) ? 'NULL ' : 'NOT NULL ';
+            sql += (def !== '' ? 'DEFAULT ' + "'" + def + "'" : '') + ' ';
+            
+            sql.trim();
+            sql += ',';
+        });
+        
+        // Remove trailing comma
+        sql = sql.slice(0, -1);
+        
+        sql += ') ENGINE = ' + engine;
+        $.post(site_url + 'index.php/home/create_table', {'sql': sql}, function(data) {
+            var status = data.status,
+                content = data.content;
+            
+            if (status) {
+                //location = site_url + 'index.php/home';
+                $('#create-table-success-alert').removeAttr('hidden');
+            } else {
+                $('#create-table-error-alert')
+                        .append('<p><strong>Error!</strong> ' + content + '</p>')
+                        .removeAttr('hidden');
+            }
+        });
+        
+        console.log(sql);
+    };
+    
+    yolo_sql.drop_table = function(table) {
+        $.post(site_url + 'index.php/home/drop_table', {'table': table}, function(data) {
+            var status = data.status,
+                content = data.content;
+            
+            if (status) {
+                location = site_url + 'index.php/home';
+            } else {
+                $('#output-section').html('<p>' + content + '</p>');
+            }
+        });
+    };
 })(window.yolo_sql = window.yolo_sql || {}, jQuery);
