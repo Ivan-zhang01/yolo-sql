@@ -45,23 +45,35 @@
     <!-- /#wrapper -->
     
     <!-- MODALS -->
-    <div class="modal fade">
+    <div class="modal fade" id="createSchemaModal" tabindex="-1" role="dialog" aria-labelledby="createSchemaModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Modal title</h4>
+                    <h4 class="modal-title" id="createSchemaModalLabel">Create schema</h4>
                 </div>
                 <div class="modal-body">
-                    <p>One fine body&hellip;</p>
+                    <form id="create-schema-form" class="form-inline" role="form" method="post" action="<?= site_url() . 'index.php/home/create_schema' ?>">
+                        <div class="form-group">
+                          <label class="sr-only">Schema name</label>
+                          <input type="text" name="schema" class="form-control" placeholder="Enter schema name">
+                        </div>
+                        <button type="submit" class="btn btn-default">Create</button>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- MENU SELECTORS -->
+    <!-- Database -->
+    <ul id="db-context-menu" class="dropdown-menu" role="menu" style="display:none" >
+        <li><a tabindex="-1" href="#">Drop schema</a></li>
+        <li><a tabindex="-1" href="#">Create table</a></li>
+    </ul>
+    
+    <!-- Table -->
+    
     
     <script src="<?= site_url('js/jquery-1.11.0.js') ?>"></script>
     <script src="<?= site_url('js/bootstrap.min.js') ?>"></script>
@@ -71,6 +83,7 @@
     <script src="<?= site_url('js/sql.js') ?>"></script>
     <script src="<?= site_url('js/show-hint.js') ?>"></script>
     <script src="<?= site_url('js/sql-hint.js') ?>"></script>
+    <script src="<?= site_url('js/context-menu.js') ?>"></script>
     <script src="<?= site_url('js/yolo-sql.js') ?>"></script>
     <script>
         $(document).ready(function() {
@@ -86,6 +99,20 @@
             
             // Execute selected
             $('#execute-selected').click(yolo_sql.execute_selected);
+            
+            // Create schema
+            $('#create-schema-form').submit(yolo_sql.create_schema);
+            
+            $('.database').contextMenu({
+                menuSelector: "#db-context-menu",
+                menuSelected: function (invokedOn, selectedMenu) {
+                    switch (selectedMenu.text()) {
+                        case 'Drop schema':
+                            yolo_sql.drop_schema(invokedOn.text());
+                        break;
+                    }
+                }
+            });
         });
     </script>
     

@@ -3,7 +3,7 @@
         <ul class="nav" id="side-menu">
             <li class="sidebar-search">
                 <a href="<?= site_url() . 'index.php/home' ?>" class="btn btn-default" type="button">
-                    <i class="fa fa-refresh"></i>
+                    <i class="fa fa-refresh"></i> Refresh
                 </a>
             </li>
             <?php foreach ($databases as $database) { ?>

@@ -76,27 +76,19 @@ class Home extends MY_Controller {
         $this->db->query('USE ' . $_SESSION['used']);
         $result = $this->db->query($_POST['content']);
         
-        if (empty($result) && $result === false)
-        {
+        if (empty($result) && $result === false) {
             // Errors
             $err_no   = $this->db->_error_number();
             $err_mess = $this->db->_error_message();
             
             $ret['status'] = false;
             $ret['content'] = "$err_no: $err_mess";
-            $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode("$err_no: $err_mess"));
-        }
-        else if ($result === true)
-        {
+        } else if ($result === true) {
             // Write type queries
             $ret['status'] = true;
             $ret['type'] = 'w';
             $ret['content'] = $this->db->affected_rows();
-        }
-        else
-        {
+        } else {
             // Read type queries
             $ret['status'] = true;
             $ret['type'] = 'r';
@@ -108,5 +100,57 @@ class Home extends MY_Controller {
         }
         
         $this->output->set_output(json_encode($ret));
+    }
+    
+    public function create_schema() {
+        session_start();
+        $this->view = false;
+        
+        // Create database
+        $result = $this->db->query('CREATE SCHEMA ' . $_POST['schema']);
+        $ret = array();
+        
+        if (empty($result) && $result === false) {
+            // Errors
+            $err_no   = $this->db->_error_number();
+            $err_mess = $this->db->_error_message();
+            
+            $ret['status'] = false;
+            $ret['content'] = "$err_no: $err_mess";
+        } else if ($result === true) {
+            $ret['status'] = true;
+            $ret['content'] = 'Schema created successfully.';
+        }
+        
+        // Send the output
+        $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($ret));
+    }
+    
+    public function drop_schema() {
+        session_start();
+        $this->view = false;
+        
+        // Create database
+        $result = $this->db->query('DROP SCHEMA ' . $_POST['schema']);
+        $ret = array();
+        
+        if (empty($result) && $result === false) {
+            // Errors
+            $err_no   = $this->db->_error_number();
+            $err_mess = $this->db->_error_message();
+            
+            $ret['status'] = false;
+            $ret['content'] = "$err_no: $err_mess";
+        } else if ($result === true) {
+            $ret['status'] = true;
+            $ret['content'] = 'Drop successful.';
+        }
+        
+        // Send the output
+        $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($ret));
     }
 }

@@ -33,10 +33,6 @@
         editor.setValue("DELETE FROM tbl_name WHERE some_column=some_value;");
     });
     
-    $('#create-schema').click(function() {
-        $('#createSchemaModal').open();
-    });
-    
     // Private functions
     var
     process_data = function(data) {
@@ -129,5 +125,39 @@
         var content = editor.getSelection();
                 
         $.post(site_url + 'index.php/home/execute_statements', {'content': content}, process_data);
+    };
+    
+    yolo_sql.create_schema = function(e) {
+        e.preventDefault();
+        
+        var $el = $(this);
+        $.post($el.attr('action'), $el.serialize(), function(data) {
+            var status = data.status,
+                content = data.content;
+            
+            if (status) {
+                location = site_url + 'index.php/home';
+            } else {
+                $('#output-section').html('<p>' + content + '</p>');
+                console.log(data);
+            }
+            
+            // Dismiss modal
+            $('#createSchemaModal').modal('hide');
+        });
+    };
+    
+    yolo_sql.drop_schema = function(schema) {
+        $.post(site_url + 'index.php/home/drop_schema', {'schema': schema}, function(data) {
+            var status = data.status,
+                content = data.content;
+            
+            if (status) {
+                location = site_url + 'index.php/home';
+            } else {
+                $('#output-section').html('<p>' + content + '</p>');
+                console.log(data);
+            }
+        });
     };
 })(window.yolo_sql = window.yolo_sql || {}, jQuery);

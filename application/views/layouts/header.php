@@ -63,7 +63,7 @@
     </li>
     <!-- /.dropdown -->
     <li>
-        <a id="create-schema" href="javascript:;"><i class="fa fa-plus"></i> <i class="fa fa-database"></i></a>
+        <a href="#" data-toggle="modal" data-target="#createSchemaModal"><i class="fa fa-plus"></i> <i class="fa fa-database"></i></a>
     </li>
     <!-- /.dropdown -->
     <li class="dropdown">
