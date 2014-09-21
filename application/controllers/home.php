@@ -207,10 +207,6 @@ class Home extends MY_Controller {
         force_download($filename, $result);
     }
     
-    public function open_sql_file() {
-        
-    }
-    
     public function create_er_diagram() {
         
     }

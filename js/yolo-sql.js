@@ -1,4 +1,5 @@
 ;(function (yolo_sql, $, undefined) {
+    
     // Private variables
     var site_url = '',
         editor = CodeMirror.fromTextArea(document.getElementById('code'), {
@@ -151,8 +152,7 @@
             if (status) {
                 location = site_url + 'index.php/home';
             } else {
-                $('#output-section').html('<p>' + content + '</p>');
-                console.log(data);
+                $('#output-section').html('<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' + content + '</div>');
             }
             
             // Dismiss modal
@@ -168,8 +168,7 @@
             if (status) {
                 location = site_url + 'index.php/home';
             } else {
-                $('#output-section').html('<p>' + content + '</p>');
-                console.log(data);
+                $('#output-section').html('<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' + content + '</div>');
             }
         });
     };
@@ -250,7 +249,7 @@
             if (status) {
                 location = site_url + 'index.php/home';
             } else {
-                $('#output-section').html('<p>' + content + '</p>');
+                $('#output-section').html('<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' + content + '</div>');
             }
         });
     };
@@ -261,9 +260,9 @@
                 content = data.content;
             
             if (status) {
-                $('#output-section').html('<p>Table "' + table + '" truncated successfully. Refresh to see changes.</p>');
+                $('#output-section').html('<div class="alert alert-success" role="alert">Table "' + table + '" truncated successfully. Refresh to see changes.</div>');
             } else {
-                $('#output-section').html('<p>' + content + '</p>');
+                $('#output-section').html('<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' + content + '</div>');
             }
         });
     };
@@ -282,6 +281,12 @@
             }));
             
         newForm.submit();
+    };
+    
+    yolo_sql.set_insert_rows_form = function(table) {
+        $('#insert-rows-body').html('');
+        
+        $('#insertRowsModal').modal('show');
     };
     
 })(window.yolo_sql = window.yolo_sql || {}, jQuery);

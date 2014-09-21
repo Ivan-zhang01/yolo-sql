@@ -7,6 +7,8 @@
 </ul>
 
 <div class="tab-content">
+    
+    <!-- SQL EDITOR TAB -->
     <div class="tab-pane active" id="sql-editor">
         <div class="row">
             <div class="col-lg-12">
@@ -24,7 +26,6 @@
                     <button id="execute-on-cursor" class="btn btn-sm btn-primary">Execute on cursor</button>
                     <button id="execute-selected" class="btn btn-sm btn-primary">Execute selected</button>
                     <button id="save-sql-file" class="btn btn-sm btn-primary">Save SQL file</button>
-                    <button id="open-sql-file" class="btn btn-sm btn-primary">Open SQL file</button>
                 </div>
                 <hr>
                 <textarea id="code"></textarea>
@@ -41,6 +42,7 @@
         </div>
     </div>
     
+    <!-- CREATE TABLE TAB -->
     <div class="tab-pane" id="create-table">
         <div hidden id="create-table-success-alert" class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -104,6 +106,7 @@
         </div>
     </div>
     
+    <!-- ER DIAGRAM TAB -->
     <div class="tab-pane" id="er-diagram">
         
     </div>

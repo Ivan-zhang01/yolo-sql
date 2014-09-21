@@ -65,25 +65,22 @@
         </div>
     </div>
     
-    <div class="modal fade" id="saveSQLModal" tabindex="-1" role="dialog" aria-labelledby="saveSQLModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+    <div class="modal fade" id="insertRowsModal" tabindex="-1" role="dialog" aria-labelledby="insertRowsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="saveSQLModalLabel">Save SQL file</h4>
+                    <h4 class="modal-title" id="insertRowsModalLabel">Insert row(s)</h4>
                 </div>
                 <div class="modal-body">
-                    <form id="create-schema-form" class="" role="form" method="post" action="<?= site_url() . 'index.php/home/create_schema' ?>">
-                        <div class="form-group">
-                          <label class="sr-only">File name</label>
-                          <input type="text" name="filename" class="form-control" placeholder="Enter file name">
-                        </div>
-                        <div class="form-group">
-                          <label class="sr-only">File location</label>
-                          <input type="file" name="filelocation">
-                        </div>
-                        <button type="submit" class="btn btn-default">Create</button>
-                    </form>
+                    <div id="insert-rows-body">
+                        
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button id="insert-add-row" class="btn btn-default">Add row</button>
+                        <button id="insert-apply" class="btn btn-primary">Apply changes</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,6 +98,7 @@
         <li><a tabindex="-1" href="#">Drop table</a></li>
         <li><a tabindex="-1" href="#">Truncate table</a></li>
         <li><a tabindex="-1" href="#">Alter table</a></li>
+        <li><a tabindex="-1" href="#">Insert</a></li>
         <li><a tabindex="-1" href="#">Select all</a></li>
     </ul>
     
@@ -153,6 +151,10 @@
                             
                         break;
                         
+                        case 'Insert':
+                            yolo_sql.set_insert_rows_form(invokedOn.text());
+                        break;
+                        
                         case 'Select all':
                             yolo_sql.execute('SELECT * FROM ' + invokedOn.text());
                         break;
@@ -189,10 +191,6 @@
             // Save SQL file
             $('#save-sql-file').click(yolo_sql.save_sql_file);
             
-            // Open SQL file
-            $('#open-sql-file').click(function() {
-                
-            });
         });
     </script>
     
