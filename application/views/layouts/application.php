@@ -75,7 +75,9 @@
     <!-- Table -->
     <ul id="table-context-menu" class="dropdown-menu" role="menu" style="display:none" >
         <li><a tabindex="-1" href="#">Drop table</a></li>
+        <li><a tabindex="-1" href="#">Truncate table</a></li>
         <li><a tabindex="-1" href="#">Alter table</a></li>
+        <li><a tabindex="-1" href="#">Select all</a></li>
     </ul>
     
     <script src="<?= site_url('js/jquery-1.11.0.js') ?>"></script>
@@ -92,7 +94,7 @@
         $(document).ready(function() {
             // First access
             yolo_sql.set_site_url("<?= site_url(); ?>");
-            $('#<?= isset($_SESSION['used']) ? $_SESSION['used'] : $used ?>').addClass('active');
+            $('#<?= $_SESSION['used'] ?>').addClass('active');
             
             // Context menus
             $('.database').contextMenu({
@@ -119,8 +121,16 @@
                             yolo_sql.drop_table(invokedOn.text());
                         break;
                         
+                        case 'Truncate table':
+                            yolo_sql.truncate_table(invokedOn.text());
+                        break;
+                        
                         case 'Alter table':
                             
+                        break;
+                        
+                        case 'Select all':
+                            yolo_sql.execute('SELECT * FROM ' + invokedOn.text());
                         break;
                     }
                 }
@@ -145,7 +155,7 @@
             $('.create-table-delete-field').click(function() {
                 var $el = $(this);
                 
-                $el.parent('tr').remove();
+                $el.parents('tr').remove();
             });
             
             // Apply changes (create table)

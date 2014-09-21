@@ -20,7 +20,6 @@ class Verify_auth extends MY_Controller {
         
         $this->db = $this->load->database($config, TRUE);
         //$this->db->database
-        
         redirect('/index.php/home/', 'refresh');
     }
     

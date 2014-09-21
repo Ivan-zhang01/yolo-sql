@@ -6,66 +6,30 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="index.html">Yolo SQL</a>
+    <a class="navbar-brand" href="<?= site_url() . 'index.php/home' ?>">Yolo SQL</a>
 </div>
 <!-- /.navbar-header -->
 
-<ul class="nav navbar-top-links navbar-right">
+<ul class="nav navbar-nav">
+    <li><a href="#">About</a></li>
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+            Docs <i class="fa fa-caret-down"></i>
         </a>
-        <ul class="dropdown-menu dropdown-messages">
-            <li>
-                <a href="#">
-                    <div>
-                        <strong>John Smith</strong>
-                        <span class="pull-right text-muted">
-                            <em>Yesterday</em>
-                        </span>
-                    </div>
-                    <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                </a>
-            </li>
-            <li class="divider"></li>
-            <li>
-                <a href="#">
-                    <div>
-                        <strong>John Smith</strong>
-                        <span class="pull-right text-muted">
-                            <em>Yesterday</em>
-                        </span>
-                    </div>
-                    <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                </a>
-            </li>
-            <li class="divider"></li>
-            <li>
-                <a href="#">
-                    <div>
-                        <strong>John Smith</strong>
-                        <span class="pull-right text-muted">
-                            <em>Yesterday</em>
-                        </span>
-                    </div>
-                    <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                </a>
-            </li>
-            <li class="divider"></li>
-            <li>
-                <a class="text-center" href="#">
-                    <strong>Read All Messages</strong>
-                    <i class="fa fa-angle-right"></i>
-                </a>
-            </li>
+        <ul class="dropdown-menu">
+            <li><a href="#"><i class="fa fa-user fa-fw"></i> Users</a></li>
+            <li><a href="#"><i class="fa fa-code fa-fw"></i> Developers</a></li>
         </ul>
-        <!-- /.dropdown-messages -->
+        <!-- /.dropdown-user -->
     </li>
-    <!-- /.dropdown -->
+</ul>
+
+<ul class="nav navbar-top-links navbar-right">
     <li>
         <a href="#" data-toggle="modal" data-target="#createSchemaModal"><i class="fa fa-plus"></i> <i class="fa fa-database"></i></a>
     </li>
     <!-- /.dropdown -->
+    
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>

@@ -1,26 +1,28 @@
-<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">Yolo SQL</h1>
-    </div>
-</div>
-
+<br>
 <!-- Nav tabs -->
 <ul id="tabs" class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#sql-editor" role="tab" data-toggle="tab">SQL Editor</a></li>
     <li><a href="#create-table" role="tab" data-toggle="tab">Create table</a></li>
+    <li><a href="#er-diagram" role="tab" data-toggle="tab">ER diagram</a></li>
 </ul>
 
 <div class="tab-content">
     <div class="tab-pane active" id="sql-editor">
         <div class="row">
             <div class="col-lg-12">
-                <div class="btn-group">
-                    <button id="execute-on-cursor" class="btn btn-sm btn-default">Execute on cursor</button>
-                    <button id="execute-selected" class="btn btn-sm btn-default">Execute selected</button>
-                    <button id="select-statement" class="btn btn-sm btn-default">Select statement</button>
-                    <button id="insert-statement" class="btn btn-sm btn-default">Insert statement</button>
-                    <button id="update-statement" class="btn btn-sm btn-default">Update statement</button>
-                    <button id="delete-statement" class="btn btn-sm btn-default">Delete statement</button>
+                <div class="dropdown btn-group">
+                    <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="templatesDropDownMenu" data-toggle="dropdown">
+                        Templates
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="templatesDropDownMenu">
+                        <li role="presentation"><a id="select-statement" role="menuitem" tabindex="-1" href="#">Select statement</a></li>
+                        <li role="presentation"><a id="insert-statement" role="menuitem" tabindex="-1" href="#">Insert statement</a></li>
+                        <li role="presentation"><a id="update-statement" role="menuitem" tabindex="-1" href="#">Update statement</a></li>
+                        <li role="presentation"><a id="delete-statement" role="menuitem" tabindex="-1" href="#">Delete statement</a></li>
+                    </ul>
+                    <button id="execute-on-cursor" class="btn btn-sm btn-primary">Execute on cursor</button>
+                    <button id="execute-selected" class="btn btn-sm btn-primary">Execute selected</button>
                 </div>
                 <hr>
                 <textarea id="code"></textarea>
@@ -90,7 +92,7 @@
                     <td><input data-field="nn" type="checkbox"></td>
                     <td><input data-field="ai" type="checkbox"></td>
                     <td><input data-field="default" type="text" class="form-control"></td>
-                    <td><button class="create-table-delete-field" class="btn btn-xs btn-danger">D</button></td>
+                    <td><button class="create-table-delete-field btn btn-xs btn-danger">&Cross;</button></td>
                 </tr>
             </tbody>
         </table>
@@ -98,5 +100,9 @@
             <button id="create-table-add-field" class="btn btn-default">Add field</button>
             <button id="create-table-apply" class="btn btn-primary">Apply changes</button>
         </div>
+    </div>
+    
+    <div class="tab-pane" id="er-diagram">
+        
     </div>
 </div>

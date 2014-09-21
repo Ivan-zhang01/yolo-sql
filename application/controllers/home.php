@@ -42,20 +42,20 @@ class Home extends MY_Controller {
             // Get views
             $this->db->query('USE information_schema');
             
-            $views[$db_name] = $this->db->select('views.*')
+            $views[$db_name] = $this->db->select('views.table_name')
                     ->where('table_schema', $db_name)
                     ->get('views')
                     ->result();
             
             // Get stored procedures
-            $procedures[$db_name] = $this->db->select('routines.*')
+            $procedures[$db_name] = $this->db->select('routines.routine_name')
                     ->where('routine_type', 'PROCEDURE')
                     ->where('routine_schema', $db_name)
                     ->get('routines')
                     ->result();
             
             // Get stored functions
-            $functions[$db_name] = $this->db->select('routines.*')
+            $functions[$db_name] = $this->db->select('routines.routine_name')
                     ->where('routine_type', 'FUNCTION')
                     ->where('routine_schema', $db_name)
                     ->get('routines')
@@ -67,9 +67,9 @@ class Home extends MY_Controller {
         $this->data['views'] = $views;
         $this->data['procedures'] = $procedures;
         $this->data['functions'] = $functions;
-        if (isset($_SESSION['used'])) {
-            $this->data['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
-        } else {
+        
+        // Check this
+        if (!isset($_SESSION['used'])) {
             $_SESSION['used'] = $this->db->query('SELECT DATABASE() as used')->row()->used;
         }
     }
@@ -95,30 +95,34 @@ class Home extends MY_Controller {
         $ret = array();
         
         // Execute statements
+        $statements = array_filter(explode(';', $_POST['content']));
         $this->db->query('USE ' . $_SESSION['used']);
-        $result = $this->db->query($_POST['content']);
         
-        if (empty($result) && $result === false) {
-            // Errors
-            $err_no   = $this->db->_error_number();
-            $err_mess = $this->db->_error_message();
+        foreach ($statements as $statement) {
+            $result = $this->db->query($statement);
             
-            $ret['status'] = false;
-            $ret['content'] = "$err_no: $err_mess";
-        } else if ($result === true) {
-            // Write type queries
-            $ret['status'] = true;
-            $ret['type'] = 'w';
-            $ret['content'] = $this->db->affected_rows();
-        } else {
-            // Read type queries
-            $ret['status'] = true;
-            $ret['type'] = 'r';
-            $ret['content'] = $result->result();
+            if ($result === false) {
+                // Errors
+                $err_no = $this->db->_error_number();
+                $err_mess = $this->db->_error_message();
             
-            $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode($ret));
+                $ret['status'] = false;
+                $ret['content'] = "$err_no: $err_mess";
+            } else if ($result === true) {
+                // Write type queries
+                $ret['status'] = true;
+                $ret['type'] = 'w';
+                $ret['content'] = $this->db->affected_rows();
+            } else {
+                // Read type queries
+                $ret['status'] = true;
+                $ret['type'] = 'r';
+                $ret['content'] = $result->result();
+
+                $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($ret));
+            }
         }
         
         $this->output->set_output(json_encode($ret));
@@ -177,5 +181,23 @@ class Home extends MY_Controller {
         $this->output
                 ->set_content_type('application/json')
                 ->set_output(json_encode($ret));
+    }
+    
+    public function truncate_table() {
+        session_start();
+        $this->view = false;
+        
+        // Create database
+        $result = $this->db->query('TRUNCATE TABLE ' . $_POST['table']);
+        $ret = $this->write_query_response($result);
+        
+        // Send the output
+        $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($ret));
+    }
+    
+    public function create_er_diagram() {
+        
     }
 }

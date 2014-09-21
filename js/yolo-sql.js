@@ -43,10 +43,10 @@
             content = data.content;
         
         // Remove previous content
-        $('#output-section').html();
+        $('#output-section').html('');
         
         if (!status) {
-            $('#output-section').html('<p>' + content + '</p>');
+            $('#output-section').html('<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' + content + '</div>');
         } else {
             if (type === 'r') {
                 if (content.length > 0) {
@@ -63,6 +63,7 @@
                     $('#output-table').html(get_columns_html(columns) + get_rows_html(content));
                 } else {
                     // Empty set
+                    $('#output-section').append('<p>Empty set.</p>');
                 }
             } else if (type === 'w') {
                 $('#output-section').html('<p>Affected rows: ' + content + '</p>');
@@ -114,16 +115,28 @@
         });
     };
     
+    yolo_sql.execute = function(query) {
+        $.post(site_url + 'index.php/home/execute_statements', {'content': query}, process_data);
+    };
+    
     yolo_sql.execute_on_cursor = function() {
         var cursor = editor.getCursor(),
                     content = editor.getLine(cursor.line);
-                    
+        
+        if (content === '') {
+            return;
+        }
+        
         $.post(site_url + 'index.php/home/execute_statements', {'content': content}, process_data);
     };
     
     yolo_sql.execute_selected = function() {
         var content = editor.getSelection();
-                
+        
+        if (content === '') {
+            return;
+        }
+        
         $.post(site_url + 'index.php/home/execute_statements', {'content': content}, process_data);
     };
     
@@ -170,7 +183,7 @@
                     '<td><input data-field="nn" type="checkbox"></td>' +
                     '<td><input data-field="ai" type="checkbox"></td>' +
                     '<td><input data-field="default" type="text" class="form-control"></td>' +
-                    '<td><button class="create-table-delete-field" class="btn btn-xs btn-danger">D</button></td>' +
+                    '<td><button class="create-table-delete-field btn btn-xs btn-danger">&Cross;</button></td>' +
                 '</tr>';
         
         $('#create-table-cols').append(str);
@@ -241,4 +254,17 @@
             }
         });
     };
+    
+    yolo_sql.truncate_table = function(table) {
+        $.post(site_url + 'index.php/home/truncate_table', {'table': table}, function(data) {
+            var status = data.status,
+                content = data.content;
+            
+            if (status) {
+                $('#output-section').html('<p>Table "' + table + '" truncated successfully. Refresh to see changes.</p>');
+            } else {
+                $('#output-section').html('<p>' + content + '</p>');
+            }
+        });
+    }
 })(window.yolo_sql = window.yolo_sql || {}, jQuery);

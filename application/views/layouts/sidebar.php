@@ -28,16 +28,30 @@
                             <?php if (!empty($views[$database->Database])) { ?>
                                 <ul class="nav nav-third-level">
                                     <?php foreach ($views[$database->Database] as $view) { ?>
-                                        <li><a href="#"><?= $view->{"Views_in_" . $database->Database} ?></a></li>
+                                        <li><a href="#"><?= $view->table_name ?></a></li>
                                     <?php } ?>
                                 </ul>
                             <?php } ?>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-gears fa-fw"></i> Procedures</a>
+                            <a href="#"><i class="fa fa-gears fa-fw"></i> Procedures<?php if (!empty($procedures[$database->Database])) { ?><span class="fa arrow"></span><?php } ?></a>
+                            <?php if (!empty($procedures[$database->Database])) { ?>
+                                <ul class="nav nav-third-level">
+                                    <?php foreach ($procedures[$database->Database] as $proc) { ?>
+                                        <li><a href="#"><?= $proc->routine_name ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            <?php } ?>
                         </li>
                         <li>
-                            <a href="#">Functions</a>
+                            <a href="#">Functions<?php if (!empty($functions[$database->Database])) { ?><span class="fa arrow"></span><?php } ?></a>
+                            <?php if (!empty($functions[$database->Database])) { ?>
+                                <ul class="nav nav-third-level">
+                                    <?php foreach ($functions[$database->Database] as $func) { ?>
+                                        <li><a href="#"><?= $func->routine_name ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            <?php } ?>
                         </li>
                     </ul>
                 </li>
