@@ -65,6 +65,30 @@
         </div>
     </div>
     
+    <div class="modal fade" id="saveSQLModal" tabindex="-1" role="dialog" aria-labelledby="saveSQLModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="saveSQLModalLabel">Save SQL file</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="create-schema-form" class="" role="form" method="post" action="<?= site_url() . 'index.php/home/create_schema' ?>">
+                        <div class="form-group">
+                          <label class="sr-only">File name</label>
+                          <input type="text" name="filename" class="form-control" placeholder="Enter file name">
+                        </div>
+                        <div class="form-group">
+                          <label class="sr-only">File location</label>
+                          <input type="file" name="filelocation">
+                        </div>
+                        <button type="submit" class="btn btn-default">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- MENU SELECTORS -->
     <!-- Database -->
     <ul id="db-context-menu" class="dropdown-menu" role="menu" style="display:none" >
@@ -152,14 +176,23 @@
             $('#create-table-add-field').click(yolo_sql.add_field);
             
             // Delete field (create table)
-            $('.create-table-delete-field').click(function() {
-                var $el = $(this);
+            $(document).on('click', '.create-table-delete-field', function() { 
+                if ($('.create-table-delete-field').length === 1)
+                    return;
                 
-                $el.parents('tr').remove();
+                $(this).parents('tr').remove();
             });
             
             // Apply changes (create table)
             $('#create-table-apply').click(yolo_sql.create_table);
+            
+            // Save SQL file
+            $('#save-sql-file').click(yolo_sql.save_sql_file);
+            
+            // Open SQL file
+            $('#open-sql-file').click(function() {
+                
+            });
         });
     </script>
     

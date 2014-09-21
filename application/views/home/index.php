@@ -23,6 +23,8 @@
                     </ul>
                     <button id="execute-on-cursor" class="btn btn-sm btn-primary">Execute on cursor</button>
                     <button id="execute-selected" class="btn btn-sm btn-primary">Execute selected</button>
+                    <button id="save-sql-file" class="btn btn-sm btn-primary">Save SQL file</button>
+                    <button id="open-sql-file" class="btn btn-sm btn-primary">Open SQL file</button>
                 </div>
                 <hr>
                 <textarea id="code"></textarea>

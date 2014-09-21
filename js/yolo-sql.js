@@ -63,10 +63,10 @@
                     $('#output-table').html(get_columns_html(columns) + get_rows_html(content));
                 } else {
                     // Empty set
-                    $('#output-section').append('<p>Empty set.</p>');
+                    $('#output-section').append('<div class="alert alert-success" role="alert"><strong>Empty set</strong> returned. Please insert some rows.</div>');
                 }
             } else if (type === 'w') {
-                $('#output-section').html('<p>Affected rows: ' + content + '</p>');
+                $('#output-section').html('<div class="alert alert-success" role="alert">Affected rows: <strong>' + content + '</strong></div>');
             }
         }
     },
@@ -266,5 +266,22 @@
                 $('#output-section').html('<p>' + content + '</p>');
             }
         });
-    }
+    };
+    
+    yolo_sql.save_sql_file = function() {
+        var content = editor.getValue();
+        
+        var newForm = $('<form>', {
+                'action': site_url + 'index.php/home/save_sql_file',
+                'target': '_top',
+                'method': 'post'
+            }).append($('<input>', {
+                'name': 'content',
+                'value': content,
+                'type': 'hidden'
+            }));
+            
+        newForm.submit();
+    };
+    
 })(window.yolo_sql = window.yolo_sql || {}, jQuery);

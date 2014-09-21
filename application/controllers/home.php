@@ -197,6 +197,20 @@ class Home extends MY_Controller {
                 ->set_output(json_encode($ret));
     }
     
+    public function save_sql_file() {
+        session_start();
+        $this->view = false;
+        
+        $result = $_POST['content'];
+        $filename = 'query.sql';
+        
+        force_download($filename, $result);
+    }
+    
+    public function open_sql_file() {
+        
+    }
+    
     public function create_er_diagram() {
         
     }
