@@ -108,6 +108,12 @@
     
     <!-- ER DIAGRAM TAB -->
     <div class="tab-pane" id="er-diagram">
+        <div class="form-group">
+            <label class="sr-only">Schema name</label>
+            <input type="text" id="er-schema-name" class="form-control" placeholder="Enter schema name">
+        </div>
+    </div>
+    <div id="draw-area">
         
     </div>
 </div>
