@@ -55,7 +55,7 @@
                         columns = [];
                     
                     // Store column names
-                    for (column in pivot) {
+                    for (var column in pivot) {
                         columns.push(column);
                     }
                     
@@ -188,13 +188,23 @@
         $('#create-table-cols').append(str);
     };
     
+    yolo_sql.add_row = function() {
+        var str = '';
+        
+        $('#insert-rows-table').append(str);
+    };
+    
     yolo_sql.create_table = function() {
         var db_name = $('#create-table-schema-name').val(),
             table_name = $('#create-table-table-name').val(),
             engine = $('#create-table-engine').val(),
             $rows = $('#create-table-cols').children(),
             sql = 'CREATE TABLE `' + db_name + '`.`' + table_name + '` (';
-    
+        
+        $('#create-table-success-alert').attr('hidden', '');
+        $('#create-table-error-alert').attr('hidden', '');
+        $('#create-table-error-alert p').remove();
+        
         $rows.each(function() {
             var def = $(this).find('[data-field="default"]').val(),
                 pk = $(this).find('[data-field="pk"]').is(':checked'),
@@ -287,18 +297,27 @@
         $('#insert-rows-body').html('');
         $('#output-table').remove();
         
-        $.post(site_url + 'index.php/home/execute_statements', {'content': 'SELECT * FROM ' + table}, function (data) {
+        $.post(site_url + 'index.php/home/execute_statements', {'content': 'DESCRIBE `' + table + '`'}, function (data) {
+            var status = data.status,
+                content = data.content;
+            
             if (status) {
-                var html = '', content = data.content;
+                var content = data.content,
+                    columns = [],
+                    html = '<table id="insert-rows-table" class="table table-bordered"><thead>';
                 
                 for (var i = 0; i < content.length; i++) {
-                    html += '<tr>';
-                    html += '';
-                    html += '</tr>';
+                    var row = content[i];
+                    
+                    columns.push(row.field);
+                    
+                    html += '<td>' + row.field + '</td>';
                 }
                 
+                html += '</thead><tbody></tbody></table>';
+                
                 $('#insert-rows-body').append(table_html);
-                $('#output-table').html('');
+                $('#output-table').html(get_columns_html(columns) + get_rows_html(content));
             } else {
                 $('#output-section').html('<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' + content + '</div>');
             }
