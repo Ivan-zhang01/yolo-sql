@@ -156,7 +156,7 @@
                         break;
                         
                         case 'Select all':
-                            yolo_sql.execute('SELECT * FROM ' + invokedOn.text());
+                            yolo_sql.execute('SELECT * FROM `' + invokedOn.text() + '`');
                         break;
                     }
                 }

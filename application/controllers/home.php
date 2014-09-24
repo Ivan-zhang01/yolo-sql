@@ -1,5 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+// `
 class Home extends MY_Controller {
     
     private function write_query_response($query_result) {
@@ -147,7 +148,7 @@ class Home extends MY_Controller {
         $this->view = false;
         
         // Create database
-        $result = $this->db->query('DROP SCHEMA ' . $_POST['schema']);
+        $result = $this->db->query('DROP SCHEMA `' . $_POST['schema'] . '`');
         $ret = $this->write_query_response($result);
         
         // Send the output
@@ -174,7 +175,7 @@ class Home extends MY_Controller {
         $this->view = false;
         
         // Create database
-        $result = $this->db->query('DROP TABLE ' . $_POST['table']);
+        $result = $this->db->query('DROP TABLE `' . $_POST['table'] . '`');
         $ret = $this->write_query_response($result);
         
         // Send the output
@@ -188,7 +189,7 @@ class Home extends MY_Controller {
         $this->view = false;
         
         // Create database
-        $result = $this->db->query('TRUNCATE TABLE ' . $_POST['table']);
+        $result = $this->db->query('TRUNCATE TABLE `' . $_POST['table'] . '`');
         $ret = $this->write_query_response($result);
         
         // Send the output

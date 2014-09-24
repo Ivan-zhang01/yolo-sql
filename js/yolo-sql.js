@@ -193,7 +193,7 @@
             table_name = $('#create-table-table-name').val(),
             engine = $('#create-table-engine').val(),
             $rows = $('#create-table-cols').children(),
-            sql = 'CREATE TABLE ' + db_name + '.' + table_name + ' (';
+            sql = 'CREATE TABLE `' + db_name + '`.`' + table_name + '` (';
     
         $rows.each(function() {
             var def = $(this).find('[data-field="default"]').val(),
@@ -285,8 +285,30 @@
     
     yolo_sql.set_insert_rows_form = function(table) {
         $('#insert-rows-body').html('');
+        $('#output-table').remove();
+        
+        $.post(site_url + 'index.php/home/execute_statements', {'content': 'SELECT * FROM ' + table}, function (data) {
+            if (status) {
+                var html = '', content = data.content;
+                
+                for (var i = 0; i < content.length; i++) {
+                    html += '<tr>';
+                    html += '';
+                    html += '</tr>';
+                }
+                
+                $('#insert-rows-body').append(table_html);
+                $('#output-table').html('');
+            } else {
+                $('#output-section').html('<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' + content + '</div>');
+            }
+        });
         
         $('#insertRowsModal').modal('show');
+    };
+    
+    yolo_sql.parse_er_diagram = function() {
+        
     };
     
 })(window.yolo_sql = window.yolo_sql || {}, jQuery);
