@@ -56,7 +56,8 @@
                     
                     // Store column names
                     for (var column in pivot) {
-                        columns.push(column);
+                        if (typeof pivot !== 'function' && pivot.hasOwnProperty(column))
+                            columns.push(column);
                     }
                     
                     // Build HTML for table
@@ -300,24 +301,19 @@
         $.post(site_url + 'index.php/home/execute_statements', {'content': 'DESCRIBE `' + table + '`'}, function (data) {
             var status = data.status,
                 content = data.content;
-            
+                
             if (status) {
                 var content = data.content,
                     columns = [],
-                    html = '<table id="insert-rows-table" class="table table-bordered"><thead>';
+                    i;
                 
-                for (var i = 0; i < content.length; i++) {
-                    var row = content[i];
-                    
-                    columns.push(row.field);
-                    
-                    html += '<td>' + row.field + '</td>';
+                for ( i = 0; i < content.length; i += 1 ) {
+                    columns[i] = content[i]['Field'];
                 }
                 
-                html += '</thead><tbody></tbody></table>';
-                
+                // Build HTML for table
                 $('#insert-rows-body').append(table_html);
-                $('#output-table').html(get_columns_html(columns) + get_rows_html(content));
+                $('#output-table').html(get_columns_html(columns));
             } else {
                 $('#output-section').html('<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' + content + '</div>');
             }
