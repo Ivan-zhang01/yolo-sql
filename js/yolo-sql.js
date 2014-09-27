@@ -305,21 +305,56 @@
             if (status) {
                 var content = data.content,
                     columns = [],
+                    body_html = '',
                     i;
                 
                 for ( i = 0; i < content.length; i += 1 ) {
                     columns[i] = content[i]['Field'];
                 }
                 
-                // Build HTML for table
+                // Build HTML template for table
                 $('#insert-rows-body').append(table_html);
-                $('#output-table').html(get_columns_html(columns));
+                $('#output-table').html(get_columns_html(columns) + '<tbody></tbody>');
+                
+                // First row (pivot --> for further usage, cloning)
+                body_html += '<tr id="insert-rows-pivot">';
+                for ( i = 0; i < columns.length; i += 1 ) {
+                    body_html += '<td><input class="form-control" type="text" data-col="' + columns[i] + '" ></td>';
+                }
+                body_html += '</tr>';
+                $('#output-table tbody').append(body_html);
             } else {
                 $('#output-section').html('<div class="alert alert-danger" role="alert"><strong>Error!</strong> ' + content + '</div>');
             }
         });
         
         $('#insertRowsModal').modal('show');
+    };
+    
+    yolo_sql.add_row = function() {
+        $new_row =  $("#insert-rows-pivot").clone();
+        $new_row.removeAttr('id');
+        
+        $('#output-table tbody').append($new_row);
+    };
+    
+    yolo_sql.insert_apply = function() {
+        var html_insert = 'INSERT INTO table_name (...) VALUES ';
+        
+        $('#output-table tr').each(function() {
+            html_insert += '(';
+            $(this).find('td input').each(function() {
+                html_insert += '"' + $(this).val() + '",';
+            });
+            html_insert = html_insert.substr(0, html_insert.length - 1); // Remove trailing comma
+            html_insert += '),';
+        });
+        html_insert = html_insert.substr(0, html_insert.length - 1); // Remove trailing comma
+        
+        // Close and clear modal
+        /*$('#insertRowsModal').modal('hide');
+        $('#insert-rows-body').html('');*/
+        console.log(html_insert);
     };
     
     yolo_sql.parse_er_diagram = function() {

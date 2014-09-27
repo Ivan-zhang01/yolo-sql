@@ -124,11 +124,11 @@
                 menuSelected: function (invokedOn, selectedMenu) {
                     switch (selectedMenu.text()) {
                         case 'Drop schema':
-                            yolo_sql.drop_schema(invokedOn.text());
+                            yolo_sql.drop_schema(invokedOn.text().trim());
                         break;
                         
                         case 'Create table':
-                            $('#create-table-schema-name').val(invokedOn.text());
+                            $('#create-table-schema-name').val(invokedOn.text().trim());
                             $('#tabs a[href="#create-table"]').tab('show');
                         break;
                     }
@@ -140,11 +140,11 @@
                 menuSelected: function (invokedOn, selectedMenu) {
                     switch (selectedMenu.text()) {
                         case 'Drop table':
-                            yolo_sql.drop_table(invokedOn.text());
+                            yolo_sql.drop_table(invokedOn.text().trim());
                         break;
                         
                         case 'Truncate table':
-                            yolo_sql.truncate_table(invokedOn.text());
+                            yolo_sql.truncate_table(invokedOn.text().trim());
                         break;
                         
                         case 'Alter table':
@@ -152,11 +152,11 @@
                         break;
                         
                         case 'Insert':
-                            yolo_sql.set_insert_rows_form(invokedOn.text());
+                            yolo_sql.set_insert_rows_form(invokedOn.text().trim());
                         break;
                         
                         case 'Select all':
-                            yolo_sql.execute('SELECT * FROM `' + invokedOn.text() + '`');
+                            yolo_sql.execute('SELECT * FROM `' + invokedOn.text().trim() + '`');
                         break;
                     }
                 }
@@ -191,6 +191,10 @@
             // Save SQL file
             $('#save-sql-file').click(yolo_sql.save_sql_file);
             
+            $('#insert-add-row').click(yolo_sql.add_row);
+            
+            // Insert rows
+            $('#insert-apply').click(yolo_sql.insert_apply);
         });
     </script>
     
