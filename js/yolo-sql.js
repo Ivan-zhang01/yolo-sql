@@ -343,13 +343,14 @@
         
         $('#output-table tr').each(function() {
             html_insert += '(';
-            $(this).find('td input').each(function() {
+            
+            $('#output-table tr td input').each(function() {
                 html_insert += '"' + $(this).val() + '",';
             });
-            html_insert = html_insert.substr(0, html_insert.length - 1); // Remove trailing comma
+            html_insert = html_insert.slice(0, -1); // Remove trailing comma
             html_insert += '),';
         });
-        html_insert = html_insert.substr(0, html_insert.length - 1); // Remove trailing comma
+        html_insert = html_insert.slice(0, -1); // Remove trailing comma
         
         // Close and clear modal
         /*$('#insertRowsModal').modal('hide');
