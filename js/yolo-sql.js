@@ -11,6 +11,7 @@
                 autofocus: true,
                 extraKeys: {"Ctrl-Space": "autocomplete"},
         }),
+        s_data = [],
         table_html = '<table id="output-table" class="table table-condensed table-bordered table-hover"></table>';
         
     // Public variables
@@ -310,10 +311,12 @@
                 
                 for ( i = 0; i < content.length; i += 1 ) {
                     columns[i] = content[i]['Field'];
+                    s_data[i] = s_data[i]['Field'];
                 }
                 
                 // Build HTML template for table
-                $('#insert-rows-body').append(table_html);
+                $('#insert-rows-body')
+                        .append(table_html);
                 $('#output-table').html(get_columns_html(columns) + '<tbody></tbody>');
                 
                 // First row (pivot --> for further usage, cloning)
@@ -339,7 +342,10 @@
     };
     
     yolo_sql.insert_apply = function() {
-        var html_insert = 'INSERT INTO table_name (...) VALUES ';
+        var html_insert = 'INSERT INTO table_name (' + s_data.join() + ') VALUES ';
+        
+        // Get column names
+        
         
         $('#output-table tr').each(function() {
             html_insert += '(';
@@ -353,6 +359,7 @@
         html_insert = html_insert.slice(0, -1); // Remove trailing comma
         
         // Close and clear modal
+        s_data = [];
         /*$('#insertRowsModal').modal('hide');
         $('#insert-rows-body').html('');*/
         console.log(html_insert);
